@@ -17,29 +17,29 @@
 - [ ] Edit user details (name, surname, role) - owner only
 
 ## Phase 3: Sales Module
-- [ ] Sales entry form (product, quantity, price, payment method, customer)
-- [ ] Payment method tracking (cash, card, debt)
-- [ ] Debt recording and tracking
+- [x] Sales entry form (product, quantity, price, payment method, customer)
+- [x] Payment method tracking (cash, card, debt)
+- [x] Debt recording and tracking
 - [ ] Sales list view with filters (date range, product, payment status)
-- [ ] Edit/delete sales entries
+- [x] Edit/delete sales entries
 - [ ] Daily sales summary
 - [ ] Sales history and audit trail
 - [x] Dashboard with sales overview and charts
 
 ## Phase 4: Production Module
-- [ ] Production entry form (product name, quantity, date)
-- [ ] Link production to ingredient consumption (auto-deduct)
+- [x] Production entry form (product name, quantity, date)
+- [x] Link production to ingredient consumption (auto-deduct)
 - [ ] Production list view with filters
-- [ ] Edit/delete production entries
+- [x] Edit/delete production entries
 - [ ] Daily production summary
 - [ ] Production history tracking
 
 ## Phase 5: Ingredients & Inventory Module
-- [ ] Ingredient master list (flour, sugar, oil, yeast, salt, etc.)
-- [ ] Inventory tracking and stock levels
-- [ ] Purchase recording (ingredient, quantity, cost, date)
-- [ ] Auto-deduction from stock based on production
-- [ ] Low stock alerts
+- [x] Ingredient master list (flour, sugar, oil, yeast, salt, etc.)
+- [x] Inventory tracking and stock levels
+- [x] Purchase recording (ingredient, quantity, cost, date)
+- [x] Auto-deduction from stock based on production
+- [x] Low stock alerts
 - [ ] Inventory history and audit trail
 - [ ] Ingredient consumption reports
 

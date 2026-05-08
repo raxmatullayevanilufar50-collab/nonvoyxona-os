@@ -8,6 +8,9 @@ import { AuthProvider, useAuthContext } from "./contexts/AuthContext";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
+import Sales from "./pages/Sales";
+import Production from "./pages/Production";
+import Ingredients from "./pages/Ingredients";
 import { Loader2 } from "lucide-react";
 
 function ProtectedRoute({ component: Component }: { component: React.ComponentType }) {
@@ -40,6 +43,15 @@ function Router() {
       </Route>
       <Route path={"/dashboard"}>
         {() => <ProtectedRoute component={Dashboard} />}
+      </Route>
+      <Route path={"/sales"}>
+        {() => <ProtectedRoute component={Sales} />}
+      </Route>
+      <Route path={"/production"}>
+        {() => <ProtectedRoute component={Production} />}
+      </Route>
+      <Route path={"/ingredients"}>
+        {() => <ProtectedRoute component={Ingredients} />}
       </Route>
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
