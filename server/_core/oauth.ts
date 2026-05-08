@@ -32,7 +32,7 @@ export function registerOAuthRoutes(app: Express) {
         openId: userInfo.openId,
         name: userInfo.name || null,
         email: userInfo.email ?? null,
-        loginMethod: userInfo.loginMethod ?? userInfo.platform ?? null,
+        pinCode: "0000", // Default PIN for OAuth users, must be changed
         lastSignedIn: new Date(),
       });
 

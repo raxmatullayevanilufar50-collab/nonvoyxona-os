@@ -22,6 +22,9 @@ export async function upsertUser(user: InsertUser): Promise<void> {
   if (!user.openId) {
     throw new Error("User openId is required for upsert");
   }
+  if (!user.pinCode) {
+    throw new Error("User pinCode is required for upsert");
+  }
 
   const db = await getDb();
   if (!db) {
@@ -32,17 +35,18 @@ export async function upsertUser(user: InsertUser): Promise<void> {
   try {
     const values: InsertUser = {
       openId: user.openId,
+      pinCode: user.pinCode,
     };
     const updateSet: Record<string, unknown> = {};
 
-    const textFields = ["name", "email", "loginMethod"] as const;
+    const textFields = ["name", "surname", "email", "phoneNumber"] as const;
     type TextField = (typeof textFields)[number];
 
     const assignNullable = (field: TextField) => {
       const value = user[field];
       if (value === undefined) return;
       const normalized = value ?? null;
-      values[field] = normalized;
+      (values as Record<string, unknown>)[field] = normalized;
       updateSet[field] = normalized;
     };
 
@@ -56,8 +60,8 @@ export async function upsertUser(user: InsertUser): Promise<void> {
       values.role = user.role;
       updateSet.role = user.role;
     } else if (user.openId === ENV.ownerOpenId) {
-      values.role = 'admin';
-      updateSet.role = 'admin';
+      values.role = 'owner';
+      updateSet.role = 'owner';
     }
 
     if (!values.lastSignedIn) {
