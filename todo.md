@@ -87,17 +87,17 @@
 - [ ] Customer communication notes
 
 ## Phase 11: Dashboard & Reporting Module
-- [ ] Dashboard overview (today's sales, expenses, profit)
-- [ ] Daily revenue chart
-- [ ] Weekly revenue chart
-- [ ] Monthly revenue chart
-- [ ] Yearly revenue chart
-- [ ] Expense breakdown chart
-- [ ] Profit margin analysis
-- [ ] Production summary charts
+- [x] Dashboard overview (today's sales, expenses, profit)
+- [x] Daily revenue chart
+- [x] Weekly revenue chart
+- [x] Monthly revenue chart
+- [x] Yearly revenue chart
+- [x] Expense breakdown chart
+- [x] Profit margin analysis
+- [x] Production summary charts
 - [ ] Debt summary and aging
-- [ ] Report export to PDF/Excel
-- [ ] Customizable date ranges for all reports
+- [x] Report export to PDF/Excel (UI ready)
+- [x] Customizable date ranges for all reports
 
 ## Phase 12: Design & Polish
 - [ ] Uzbek language implementation across all screens
