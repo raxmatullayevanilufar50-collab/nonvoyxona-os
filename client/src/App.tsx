@@ -14,6 +14,7 @@ import Ingredients from "./pages/Ingredients";
 import Expenses from "./pages/Expenses";
 import Salaries from "./pages/Salaries";
 import Customers from "./pages/Customers";
+import Delivery from "./pages/Delivery";
 import { Loader2 } from "lucide-react";
 
 function ProtectedRoute({ component: Component }: { component: React.ComponentType }) {
@@ -64,6 +65,9 @@ function Router() {
       </Route>
       <Route path={"/customers"}>
         {() => <ProtectedRoute component={Customers} />}
+      </Route>
+      <Route path={"/delivery"}>
+        {() => <ProtectedRoute component={Delivery} />}
       </Route>
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}

@@ -44,43 +44,43 @@
 - [ ] Ingredient consumption reports
 
 ## Phase 6: Delivery & Driver Module
-- [ ] Delivery order creation (driver, products, quantities)
-- [ ] Delivery status tracking (pending, in-transit, completed, returned)
-- [ ] Assign deliveries to drivers
-- [ ] Track returned unsold goods
-- [ ] Delivery list view with filters
+- [x] Delivery order creation (driver, products, quantities)
+- [x] Delivery status tracking (pending, in-transit, completed, returned)
+- [x] Assign deliveries to drivers
+- [x] Track returned unsold goods
+- [x] Delivery list view with filters
 - [ ] Driver performance tracking
 
 ## Phase 7: Driver Settlement Module
-- [ ] Calculate driver earnings based on completed deliveries
-- [ ] Apply deductions for returned goods
-- [ ] Daily settlement summary per driver
+- [x] Calculate driver earnings based on completed deliveries
+- [x] Apply deductions for returned goods
+- [x] Daily settlement summary per driver
 - [ ] Weekly payout summaries
 - [ ] Settlement history and audit trail
-- [ ] Driver debt/advance tracking
+- [x] Driver debt/advance tracking
 
 ## Phase 8: Expenses Module
-- [ ] Expense entry form (category, amount, date, description)
-- [ ] Expense categories (utilities, rent, maintenance, fuel, etc.)
+- [x] Expense entry form (category, amount, date, description)
+- [x] Expense categories (utilities, rent, maintenance, fuel, etc.)
 - [ ] Paid/unpaid expense tracking
-- [ ] Expense list view with filters (date, category, status)
-- [ ] Edit/delete expenses
+- [x] Expense list view with filters (date, category, status)
+- [x] Edit/delete expenses
 - [ ] Monthly expense summary
 - [ ] Expense reports by category
 
 ## Phase 9: Salaries Module
 - [ ] Employee records management
-- [ ] Monthly salary assignment
-- [ ] Salary advance recording
-- [ ] Salary payment tracking (paid/unpaid)
-- [ ] Salary history per employee
+- [x] Monthly salary assignment
+- [x] Salary advance recording
+- [x] Salary payment tracking (paid/unpaid)
+- [x] Salary history per employee
 - [ ] Payout summaries (monthly, yearly)
 - [ ] Salary reports and analytics
 
 ## Phase 10: Customer & Debt Module
-- [ ] Customer master list
-- [ ] Debt tracking per customer
-- [ ] Payment recording and reconciliation
+- [x] Customer master list
+- [x] Debt tracking per customer
+- [x] Payment recording and reconciliation
 - [ ] Balance history per customer
 - [ ] Customer purchase history
 - [ ] Debt aging reports
