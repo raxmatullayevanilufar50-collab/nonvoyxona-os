@@ -6,11 +6,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 import { LogOut, Menu, X } from "lucide-react";
 import { useState } from "react";
+import { useLocation } from "wouter";
 
 export default function Dashboard() {
   const { t } = useI18n();
   const { user, logout } = useAuthContext();
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [, navigate] = useLocation();
 
   const handleLogout = async () => {
     try {
@@ -108,18 +110,19 @@ export default function Dashboard() {
           <aside className="w-64 bg-white border-r-2 border-amber-200 p-6 shadow-sm">
             <nav className="space-y-2">
               {[
-                { label: t("dashboard.title"), icon: "📊" },
-                { label: t("sales.title"), icon: "🛒" },
-                { label: t("production.title"), icon: "🏭" },
-                { label: t("ingredients.title"), icon: "🥘" },
-                { label: t("delivery.title"), icon: "🚚" },
-                { label: t("expenses.title"), icon: "💳" },
-                { label: t("salaries.title"), icon: "💼" },
-                { label: t("customers.title"), icon: "👥" },
-                { label: t("reports.title"), icon: "📈" },
+                { label: t("dashboard.title"), icon: "📊", path: "/dashboard" },
+                { label: t("sales.title"), icon: "🛒", path: "/sales" },
+                { label: t("production.title"), icon: "🏭", path: "/production" },
+                { label: t("ingredients.title"), icon: "🥘", path: "/ingredients" },
+                { label: t("delivery.title"), icon: "🚚", path: "/delivery" },
+                { label: t("expenses.title"), icon: "💳", path: "/expenses" },
+                { label: t("salaries.title"), icon: "💼", path: "/salaries" },
+                { label: t("customers.title"), icon: "👥", path: "/customers" },
+                { label: t("reports.title"), icon: "📈", path: "/reports" },
               ].map((item) => (
                 <button
                   key={item.label}
+                  onClick={() => navigate(item.path)}
                   className="w-full text-left px-4 py-2 rounded-lg hover:bg-amber-100 transition-colors font-medium text-gray-700 hover:text-amber-900"
                 >
                   <span className="mr-2">{item.icon}</span>
