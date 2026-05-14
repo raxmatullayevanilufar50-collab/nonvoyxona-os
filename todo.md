@@ -182,3 +182,20 @@
 - Login time < 5 seconds
 - Report generation < 10 seconds
 - Real-time inventory updates
+
+## Phase 15: Voice AI System (NEW)
+- [x] Voice transcription service (Uzbek speech-to-text)
+- [x] Voice synthesis service (text-to-speech)
+- [x] Voice input component for forms
+- [x] Voice navigation commands
+- [x] Voice feedback and confirmations
+- [x] Number extraction from voice
+- [x] Command parsing for navigation
+- [ ] Voice input in Production module
+- [ ] Voice input in Ingredients module
+- [ ] Voice input in Expenses module
+- [ ] Voice input in Salaries module
+- [ ] Voice input in Customers module
+- [ ] Voice input in Delivery module
+- [ ] Microphone permission handling
+- [ ] Voice error recovery and retry logic
