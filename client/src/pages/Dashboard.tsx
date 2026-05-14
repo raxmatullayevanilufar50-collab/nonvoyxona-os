@@ -4,7 +4,8 @@ import { useAuthContext } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
-import { LogOut, Menu, X } from "lucide-react";
+import { LogOut, Menu, X, Mic, MicOff } from "lucide-react";
+import { useVoiceNavigation } from "@/hooks/useVoiceNavigation";
 import { useState } from "react";
 import { useLocation } from "wouter";
 
@@ -13,6 +14,7 @@ export default function Dashboard() {
   const { user, logout } = useAuthContext();
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [, navigate] = useLocation();
+  const { isListening, startVoiceNavigation, stopVoiceNavigation } = useVoiceNavigation();
 
   const handleLogout = async () => {
     try {
@@ -88,6 +90,25 @@ export default function Dashboard() {
             <h1 className="text-2xl font-bold text-amber-900">Nonvoyxona</h1>
           </div>
           <div className="flex items-center gap-4">
+            <Button
+              onClick={isListening ? stopVoiceNavigation : startVoiceNavigation}
+              variant={isListening ? "destructive" : "outline"}
+              size="sm"
+              className="gap-2"
+              title="Ovozli navigatsiya"
+            >
+              {isListening ? (
+                <>
+                  <MicOff size={18} />
+                  Toxtat
+                </>
+              ) : (
+                <>
+                  <Mic size={18} />
+                  Ovoz
+                </>
+              )}
+            </Button>
             <div className="text-right">
               <p className="font-semibold text-gray-800">{user?.name || "Foydalanuvchi"}</p>
               <p className="text-sm text-gray-600">{t(`roles.${user?.role || "cashier"}`)}</p>

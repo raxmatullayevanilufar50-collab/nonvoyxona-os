@@ -6,6 +6,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { trpc } from "@/lib/trpc";
 import { Plus, Trash2, Edit2, Loader2 } from "lucide-react";
+import VoiceInput from "@/components/VoiceInput";
+import { voiceService } from "@/services/voiceService";
 
 export default function Sales() {
   const { t } = useI18n();
@@ -99,6 +101,33 @@ export default function Sales() {
                     <AlertDescription>{error}</AlertDescription>
                   </Alert>
                 )}
+
+                {/* Voice Input Section */}
+                <div className="mb-6 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border-2 border-blue-200">
+                  <h3 className="font-semibold text-blue-900 mb-3">🎤 Ovozli Kiritish</h3>
+                  <VoiceInput
+                    onTranscript={(text) => {
+                      // Parse voice input for product ID
+                      const numbers = voiceService.extractNumbers(text);
+                      if (numbers.length > 0) {
+                        setFormData({ ...formData, productId: numbers[0] });
+                      }
+                    }}
+                    onComplete={(text) => {
+                      // Auto-fill fields from voice
+                      const numbers = voiceService.extractNumbers(text);
+                      if (numbers.length >= 3) {
+                        setFormData({
+                          ...formData,
+                          productId: numbers[0],
+                          quantity: numbers[1].toString(),
+                          unitPrice: numbers[2].toString(),
+                        });
+                      }
+                    }}
+                    placeholder="Mahsulot raqami, miqdori va narxni ayting..."
+                  />
+                </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
