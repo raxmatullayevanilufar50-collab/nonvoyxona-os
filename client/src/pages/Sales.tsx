@@ -12,6 +12,9 @@ import { voiceService } from "@/services/voiceService";
 export default function Sales() {
   const { t } = useI18n();
   const [showForm, setShowForm] = useState(false);
+  const [filterPaymentMethod, setFilterPaymentMethod] = useState<string>("all");
+  const [filterDateFrom, setFilterDateFrom] = useState<string>("");
+  const [filterDateTo, setFilterDateTo] = useState<string>("");
   const [formData, setFormData] = useState({
     productId: 1,
     quantity: "",
@@ -23,7 +26,15 @@ export default function Sales() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const { data: sales, isLoading: salesLoading, refetch } = trpc.sales.list.useQuery({ limit: 50 });
+  const { data: sales, isLoading: salesLoading, refetch } = trpc.sales.list.useQuery({ limit: 100 });
+  
+  // Filter sales based on criteria
+  const filteredSales = sales?.filter((sale: any) => {
+    if (filterPaymentMethod !== "all" && sale.paymentMethod !== filterPaymentMethod) return false;
+    if (filterDateFrom && new Date(sale.createdAt) < new Date(filterDateFrom)) return false;
+    if (filterDateTo && new Date(sale.createdAt) > new Date(filterDateTo)) return false;
+    return true;
+  }) || [];
   const createSale = trpc.sales.create.useMutation();
   const deleteSale = trpc.sales.delete.useMutation();
 
@@ -73,6 +84,76 @@ export default function Sales() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-rose-50 p-8">
       <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="mb-8 flex justify-between items-center">
+          <div>
+            <h1 className="text-4xl font-bold text-amber-900 mb-2">{t("sales.title")}</h1>
+            <p className="text-amber-700">{t("dashboard.overview")}</p>
+          </div>
+          <Button
+            onClick={() => setShowForm(!showForm)}
+            className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600"
+          >
+            <Plus size={20} className="mr-2" />
+            {t("sales.newSale")}
+          </Button>
+        </div>
+
+        {/* Filters */}
+        <Card className="border-2 border-amber-200 mb-6 shadow-lg">
+          <CardHeader className="bg-gradient-to-r from-amber-100 to-orange-100">
+            <CardTitle className="text-amber-900">🔍 Filtrlar</CardTitle>
+          </CardHeader>
+          <CardContent className="pt-4">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Tolov usuli</label>
+                <select
+                  value={filterPaymentMethod}
+                  onChange={(e) => setFilterPaymentMethod(e.target.value)}
+                  className="w-full px-3 py-2 border border-amber-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500"
+                >
+                  <option value="all">Barchasi</option>
+                  <option value="cash">Naqd pul</option>
+                  <option value="card">Karta</option>
+                  <option value="debt">Qarz</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Boshlanish sanasi</label>
+                <Input
+                  type="date"
+                  value={filterDateFrom}
+                  onChange={(e) => setFilterDateFrom(e.target.value)}
+                  className="border-amber-300"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Tugash sanasi</label>
+                <Input
+                  type="date"
+                  value={filterDateTo}
+                  onChange={(e) => setFilterDateTo(e.target.value)}
+                  className="border-amber-300"
+                />
+              </div>
+              <div className="flex items-end">
+                <Button
+                  onClick={() => {
+                    setFilterPaymentMethod("all");
+                    setFilterDateFrom("");
+                    setFilterDateTo("");
+                  }}
+                  variant="outline"
+                  className="w-full border-amber-300 text-amber-700"
+                >
+                  Qayta o'rnatish
+                </Button>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
         {/* Header */}
         <div className="mb-8 flex justify-between items-center">
           <div>
@@ -261,7 +342,7 @@ export default function Sales() {
               <div className="flex justify-center py-8">
                 <Loader2 className="h-8 w-8 animate-spin text-amber-500" />
               </div>
-            ) : sales && sales.length > 0 ? (
+            ) : filteredSales.length > 0 ? (
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
@@ -285,7 +366,7 @@ export default function Sales() {
                     </tr>
                   </thead>
                   <tbody>
-                    {sales.map((sale) => (
+                    {filteredSales.map((sale) => (
                       <tr key={sale.id} className="border-b border-amber-100 hover:bg-amber-50">
                         <td className="py-3 px-4">{sale.id}</td>
                         <td className="py-3 px-4">Product #{sale.productId}</td>

@@ -15,15 +15,14 @@
 - [x] User profile and role management page (owner only)
 - [x] Add/remove users functionality (owner only)
 - [x] Edit user details (name, surname, role) - owner only
+- [x] Two-step authentication (PIN + Secret code)
 
 ## Phase 3: Sales Module
 - [x] Sales entry form (product, quantity, price, payment method, customer)
 - [x] Payment method tracking (cash, card, debt)
 - [x] Debt recording and tracking
-- [ ] Sales list view with filters (date range, product, payment status)
+- [ ] Sales list view with filters (date range, product, payment status) [CRITICAL]
 - [x] Edit/delete sales entries
-- [ ] Daily sales summary
-- [ ] Sales history and audit trail
 - [x] Dashboard with sales overview and charts
 
 ## Phase 4: Production Module
