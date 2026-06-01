@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import VoiceInput from "@/components/VoiceInput";
+import { voiceService } from "@/services/voiceService";
 import { useI18n } from "@/hooks/useI18n";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";

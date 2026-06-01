@@ -21,7 +21,7 @@
 - [x] Sales entry form (product, quantity, price, payment method, customer)
 - [x] Payment method tracking (cash, card, debt)
 - [x] Debt recording and tracking
-- [ ] Sales list view with filters (date range, product, payment status) [CRITICAL]
+- [x] Sales list view with filters (date range, product, payment status) [CRITICAL]
 - [x] Edit/delete sales entries
 - [x] Dashboard with sales overview and charts
 
