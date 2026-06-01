@@ -12,9 +12,9 @@
 - [x] Owner secret code validation layer
 - [x] Role-based access control (owner, manager, cashier, driver)
 - [x] Login flow with session management
-- [ ] User profile and role management page (owner only)
-- [ ] Add/remove users functionality (owner only)
-- [ ] Edit user details (name, surname, role) - owner only
+- [x] User profile and role management page (owner only)
+- [x] Add/remove users functionality (owner only)
+- [x] Edit user details (name, surname, role) - owner only
 
 ## Phase 3: Sales Module
 - [x] Sales entry form (product, quantity, price, payment method, customer)

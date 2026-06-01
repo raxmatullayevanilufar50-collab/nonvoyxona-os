@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useI18n } from "@/hooks/useI18n";
+import { useAuthContext } from "@/contexts/AuthContext";
 import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,10 +8,13 @@ import { Card } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
-import { Trash2, Edit2, Plus } from "lucide-react";
+import { Trash2, Edit2, Plus, Loader2 } from "lucide-react";
+import { useLocation } from "wouter";
 
 export default function UserManagement() {
   const { t } = useI18n();
+  const { user } = useAuthContext();
+  const [, navigate] = useLocation();
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [editingUser, setEditingUser] = useState<any>(null);
   const [formData, setFormData] = useState({
@@ -21,9 +25,17 @@ export default function UserManagement() {
     role: "cashier",
   });
 
-  // Placeholder for users list
-  const users: any[] = [];
-  const isLoading = false;
+  // Redirect if not owner
+  if (user?.role !== "owner") {
+    navigate("/dashboard");
+    return null;
+  }
+
+  // Fetch users
+  const { data: users = [], isLoading, refetch } = trpc.users.list.useQuery();
+  const createUserMutation = trpc.users.create.useMutation();
+  const updateUserMutation = trpc.users.update.useMutation();
+  const deleteUserMutation = trpc.users.delete.useMutation();
 
   const handleAddUser = async () => {
     if (!formData.name || !formData.pinCode || formData.pinCode.length < 4) {
@@ -32,11 +44,40 @@ export default function UserManagement() {
     }
 
     try {
+      await createUserMutation.mutateAsync({
+        name: formData.name,
+        surname: formData.surname || undefined,
+        phoneNumber: formData.phoneNumber || undefined,
+        pinCode: formData.pinCode,
+        role: formData.role as "manager" | "cashier" | "driver",
+      });
+
       toast.success(t("messages.success"));
       setIsAddDialogOpen(false);
       setFormData({ name: "", surname: "", phoneNumber: "", pinCode: "", role: "cashier" });
-    } catch (error) {
-      toast.error(t("errors.operationFailed"));
+      refetch();
+    } catch (error: any) {
+      toast.error(error.message || t("errors.operationFailed"));
+    }
+  };
+
+  const handleUpdateUser = async () => {
+    if (!editingUser) return;
+
+    try {
+      await updateUserMutation.mutateAsync({
+        id: editingUser.id,
+        name: editingUser.name,
+        surname: editingUser.surname,
+        phoneNumber: editingUser.phoneNumber,
+        role: editingUser.role,
+      });
+
+      toast.success(t("messages.success"));
+      setEditingUser(null);
+      refetch();
+    } catch (error: any) {
+      toast.error(error.message || t("errors.operationFailed"));
     }
   };
 
@@ -44,9 +85,11 @@ export default function UserManagement() {
     if (!confirm(t("common.delete"))) return;
 
     try {
+      await deleteUserMutation.mutateAsync({ id: userId });
       toast.success(t("messages.success"));
-    } catch (error) {
-      toast.error(t("errors.operationFailed"));
+      refetch();
+    } catch (error: any) {
+      toast.error(error.message || t("errors.operationFailed"));
     }
   };
 
@@ -123,7 +166,12 @@ export default function UserManagement() {
                     </SelectContent>
                   </Select>
                 </div>
-                <Button onClick={handleAddUser} className="w-full bg-gradient-to-r from-purple-600 to-pink-600">
+                <Button
+                  onClick={handleAddUser}
+                  disabled={createUserMutation.isPending}
+                  className="w-full bg-gradient-to-r from-purple-600 to-pink-600"
+                >
+                  {createUserMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
                   {t("common.save")}
                 </Button>
               </div>
@@ -131,25 +179,86 @@ export default function UserManagement() {
           </Dialog>
         </div>
 
+        {/* Edit User Dialog */}
+        <Dialog open={!!editingUser} onOpenChange={(open) => !open && setEditingUser(null)}>
+          <DialogContent className="bg-white border-amber-200">
+            <DialogHeader>
+              <DialogTitle className="text-amber-900">{t("common.edit")}</DialogTitle>
+            </DialogHeader>
+            {editingUser && (
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-amber-900 mb-1">{t("fields.name")}</label>
+                  <Input
+                    value={editingUser.name}
+                    onChange={(e) => setEditingUser({ ...editingUser, name: e.target.value })}
+                    className="border-amber-200"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-amber-900 mb-1">{t("fields.surname")}</label>
+                  <Input
+                    value={editingUser.surname || ""}
+                    onChange={(e) => setEditingUser({ ...editingUser, surname: e.target.value })}
+                    className="border-amber-200"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-amber-900 mb-1">{t("fields.phoneNumber")}</label>
+                  <Input
+                    value={editingUser.phoneNumber || ""}
+                    onChange={(e) => setEditingUser({ ...editingUser, phoneNumber: e.target.value })}
+                    className="border-amber-200"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-amber-900 mb-1">{t("fields.role")}</label>
+                  <Select value={editingUser.role} onValueChange={(value) => setEditingUser({ ...editingUser, role: value })}>
+                    <SelectTrigger className="border-amber-200">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="manager">{t("roles.manager")}</SelectItem>
+                      <SelectItem value="cashier">{t("roles.cashier")}</SelectItem>
+                      <SelectItem value="driver">{t("roles.driver")}</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <Button
+                  onClick={handleUpdateUser}
+                  disabled={updateUserMutation.isPending}
+                  className="w-full bg-gradient-to-r from-purple-600 to-pink-600"
+                >
+                  {updateUserMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
+                  {t("common.save")}
+                </Button>
+              </div>
+            )}
+          </DialogContent>
+        </Dialog>
+
         {/* Users List */}
         <div className="grid gap-4">
           {isLoading ? (
-            <div className="text-center py-8 text-amber-700">{t("messages.loading")}</div>
+            <div className="text-center py-8 text-amber-700">
+              <Loader2 className="w-6 h-6 animate-spin mx-auto mb-2" />
+              {t("messages.loading")}
+            </div>
           ) : users.length === 0 ? (
             <Card className="p-8 text-center border-amber-200 bg-white/50">
               <p className="text-amber-700">{t("messages.noData")}</p>
             </Card>
           ) : (
-            users.map((user: any) => (
-              <Card key={user.id} className="p-4 border-amber-200 bg-white/50 hover:bg-white/80 transition-all">
+            users.map((u: any) => (
+              <Card key={u.id} className="p-4 border-amber-200 bg-white/50 hover:bg-white/80 transition-all">
                 <div className="flex items-center justify-between">
                   <div className="flex-1">
                     <h3 className="font-semibold text-amber-900">
-                      {user.name} {user.surname}
+                      {u.name} {u.surname || ""}
                     </h3>
-                    <p className="text-sm text-amber-700">{user.phoneNumber}</p>
+                    <p className="text-sm text-amber-700">{u.phoneNumber}</p>
                     <p className="text-xs text-amber-600 mt-1">
-                      {t("fields.role")}: {t(`roles.${user.role}`)}
+                      {t("fields.role")}: {t(`roles.${u.role}`)}
                     </p>
                   </div>
                   <div className="flex gap-2">
@@ -157,7 +266,7 @@ export default function UserManagement() {
                       variant="outline"
                       size="sm"
                       className="border-amber-300 text-amber-700 hover:bg-amber-50"
-                      onClick={() => setEditingUser(user)}
+                      onClick={() => setEditingUser(u)}
                     >
                       <Edit2 className="w-4 h-4" />
                     </Button>
@@ -165,9 +274,10 @@ export default function UserManagement() {
                       variant="outline"
                       size="sm"
                       className="border-red-300 text-red-700 hover:bg-red-50"
-                      onClick={() => handleDeleteUser(user.id)}
+                      onClick={() => handleDeleteUser(u.id)}
+                      disabled={deleteUserMutation.isPending}
                     >
-                      <Trash2 className="w-4 h-4" />
+                      {deleteUserMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
                     </Button>
                   </div>
                 </div>
