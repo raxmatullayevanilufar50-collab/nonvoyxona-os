@@ -140,6 +140,7 @@ export default function Dashboard() {
                 { label: t("salaries.title"), icon: "💼", path: "/salaries" },
                 { label: t("customers.title"), icon: "👥", path: "/customers" },
                 { label: t("reports.title"), icon: "📈", path: "/reports" },
+                { label: t("nav.users"), icon: "👤", path: "/users" },
               ].map((item) => (
                 <button
                   key={item.label}
